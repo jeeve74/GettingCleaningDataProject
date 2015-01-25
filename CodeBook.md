@@ -9,7 +9,7 @@ The version of the data used for this project was current as of 1/24/2015.
 The code book for the two files generated for this project can be found in CodeBook.md https://github.com/jeeve74/GettingCleaningDataProject/blob/master/CodeBook.md 
 
 ###Required R libraries
-```dplyr```
+* dplyr
 
 ###Data Gathering and Cleansing Steps
 The below steps were used to download and read the Samsung smartphone data to produce two (2) tidy data sets.
