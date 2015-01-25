@@ -1,8 +1,13 @@
-## This below code Gets and Cleans Data based on the specs for the Course Project
+## Getting and Cleaning Data Course Project
+## The below code downloads a zip file and then unzips the file
+## The data in that file is then merged and cleansed into 2 tidy files based on the project specs
+## The file CodeBook.md contains the data dictionary of the 2 tidy files
+## The REARDME.md contains step-by-step explanation for data gathering and cleansing steps
 
 library(dplyr)
 rm(list = ls()) #cleans out all variables
-rm(list = ls())
+dateDownloaded <- date()
+dateDownloaded
 
 ## Download data file and unzip it
 download.file("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip", destfile = "./getdata-projectfiles-UCI HAR Dataset.zip")
@@ -23,9 +28,9 @@ dfTrainActivities <- read.table("./UCI HAR Dataset/train/y_train.txt",col.names=
 
 
 ## 1. Merges the training and the test sets to create one data set.
-dfTrain <- cbind("Train",dfTrainSubjects,dfTrainActivities,dfTrainMeasurements) # combine 3 Train data sets
+dfTrain <- cbind("TRAIN",dfTrainSubjects,dfTrainActivities,dfTrainMeasurements) # combine 3 Train data sets
 names(dfTrain)[1] <- "UsageType"
-dfTest <- cbind("Test",dfTestSubjects,dfTestActivities,dfTestMeasurements) # combine 3 Test data sets
+dfTest <- cbind("TEST ",dfTestSubjects,dfTestActivities,dfTestMeasurements) # combine 3 Test data sets
 names(dfTest)[1] <- "UsageType"
 dfTrainAndTest <- rbind(dfTrain,dfTest) # combind Train and Test data sets
 index <- data.frame(ObservationKey=1:nrow(dfTrainAndTest))
@@ -55,16 +60,29 @@ colNames3 <- gsub("[.][.][.]",".",colNames3)    # remove 3 consequitive periods
 colNames3 <- gsub("[.][.]","",colNames3)        # remove ending periods
 names(dfStep4) <- colNames3                     # assign new column names to data set
 
+# Reformat character variables to fixed length strings
+dfStep4$ObservationKey <- sprintf("% 5s", dfStep4$ObservationKey)
+dfStep4$UsageType <- sprintf("%-5s", dfStep4$UsageType)
+dfStep4$SubjectKey <- sprintf("% 2s", dfStep4$SubjectKey)
+dfStep4$ActivityName <- sprintf("%-18s", dfStep4$ActivityName)
+dfStep4 <- arrange(dfStep4,ObservationKey)              #sort by ObservationKey
+
+write.table(dfStep4, file = "SmartPhoneStdAndMean.txt", sep = " ", row.name=FALSE)        #Write the data to txt file
+
+
 
 # 5. From the data set in step 4, creates a second, independent tidy data set with the average of 
 #       each variable for each activity and each subject.
-dfGrouping <- dfStep4[,3:ncol(dfStep4)]
+dfGrouping <- dfStep4[,3:ncol(dfStep4)]                 #discard first 2 columns as they are no longer needed
 dfMean <- dfGrouping %>%
         group_by(SubjectKey,ActivityName) %>%
-        summarise_each(funs(mean(., na.rm = TRUE)))
+        summarise_each(funs(mean(., na.rm = TRUE)))     #group and summarize data using the mean
 
-names(dfMean) <- paste("mean.of.",names(dfGrouping),sep="")
+names(dfMean) <- paste("mean.of.",names(dfGrouping),sep="")     #rename the variable names
 names(dfMean)[1] <- "SubjectKey"
 names(dfMean)[2] <- "ActivityName"
-dfStep5 <- arrange(dfMean,SubjectKey,ActivityName)
+dfStep5 <- arrange(dfMean,SubjectKey,ActivityName)              #sort by SubjectKey, ActivityName
+
+write.table(dfStep5, file = "SmartPhoneAverageBySubjectActivity.txt", sep = " ", row.name=FALSE)        #Write the data to txt file
+
 
