@@ -1,9 +1,9 @@
 ##DATA DICTIONARY - data collected from the accelerometers from the Samsung Galaxy S smartphone
 
 ### Data File: SmartPhoneStdAndMean.txt
-ObservationKey 5
-	Unique Identifier for each observation that was measured
-	1,2,3...10299
+#### ObservationKey 5
+##### Unique Identifier for each observation that was measured
+##### 1,2,3...10299
 UsageType 5
 	Identifier denoting how observation was used in analysis
 	TRAIN
