@@ -1,12 +1,13 @@
 ## Getting and Cleaning Data Course Project
 ## The below code downloads a zip file and then unzips the file
 ## The data in that file is then merged and cleansed into 2 tidy files based on the project specs
-## The file CodeBook.md contains the data dictionary of the 2 tidy files
-## The REARDME.md contains step-by-step explanation for data gathering and cleansing steps
+## The file CodeBook.md contains the data dictionary of the 2 tidy files and the steps taken
+## for gathering the cleansing the data to produce the tidy files.
+## The REARDME.md contains instructions on running this program.
 
 library(dplyr)
 rm(list = ls()) #cleans out all variables
-dateDownloaded <- date()
+dateDownloaded <- date()        #time the file was downloaded - initial date was 1/24/2015
 dateDownloaded
 
 ## Download data file and unzip it
